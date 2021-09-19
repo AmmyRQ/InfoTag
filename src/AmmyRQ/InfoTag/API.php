@@ -91,6 +91,7 @@ class API
 
     /**
      * Returns the amount of ping formatted
+     * @return string
      */
     public static function getFormattedPing(Player $player) : string
     {
