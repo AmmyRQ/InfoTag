@@ -1,0 +1,47 @@
+#DO NOT MODIFY THIS LINE
+# If you modify or delete this line the file will be deleted and recreated
+# with the original version, & all changes you have made will be removed.
+cfg-version: 1.0
+
+#############################
+# --- Player nametag format ---
+# [!] If PureChat is disabled, the player's name will be used instead.
+# {nametag} -> PureChat nametag format.
+# {health} -> Player's current health.
+# {maxhealth} -> PLayer's max health.
+# {food} -> Player's current food.
+# {maxfood} -> Player's max food.
+# {ping} -> Player's ping (ms).
+# {device} -> The device from which the player is playing
+# ---------------------------------------------------------------------
+# You can use the unicode symbols from the game.
+# You can find them here: https://wiki.bedrock.dev/concepts/emojis.html
+# ---------------------------------------------------------------------
+# Use \n to add a new line, and § to add colors.
+# You can find all the colors here: https://minecraft.fandom.com/wiki/Formatting_codes#Color_codes
+#############################
+format: "{nametag}\n§c§l{health} ♥ §r| §g{food} \n§b{device} §r| §8Ping: {ping}"
+
+#############################
+# Time in which the players' nametag will be updated (seconds)
+#############################
+update-time: 1
+
+#############################
+# Worlds in which the nametag will be displayed in the format established above.
+#############################
+worlds: ["world", "nether"]
+
+#############################
+# Format that the player's ping will have
+# Considerations:
+#   - Good ping: From 0 ms to 90 ms
+#   - Intermediate ping: From 91 ms to 140 ms
+#   - Bad ping: From 141 ms to 200 ms
+#   - Very bad ping: From 201 ms upwards
+#############################
+pings:
+  good: "§a{ping}"
+  intermediate: "§g{ping}"
+  bad: "§6{ping}"
+  verybad: "§4{ping}"
