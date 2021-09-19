@@ -23,4 +23,7 @@ The following options are available within the available format:
 You can also use the unicode symbols of the game and add colors! (See the <a href="https://github.com/AmmyR/InfoTag/blob/main/resources/format.yml#L17">format.yml</a> file for more information).
 
 # 🔎 Example (Default formatted nametag)
-<img src="example.png"/>
+<div align="center">
+  <br>
+  <img src="example.png"/>
+</div>
