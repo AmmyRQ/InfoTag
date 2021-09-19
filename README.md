@@ -7,7 +7,7 @@ You must first install the plugin ("plugins/" folder) and start the server, and 
 Inside the "plugin_data/InfoTag" folder a file called "format.yml" will be created, which you can modify.
 
 # ❓ How to modify the format?
-You can modify the "format" key inside the file <a href="resources/format.yml">"format.yml"</a>. 
+You can modify the <a href="https://github.com/AmmyR/InfoTag/blob/main/resources/format.yml#L23">"format"</a> key inside the file <a href="https://github.com/AmmyR/InfoTag/blob/main/resources/format.yml">"format.yml"</a>. 
 
 The following options are available within the available format:
 <ul>
@@ -20,7 +20,7 @@ The following options are available within the available format:
   <li><b>{device}</b> -> The device from which the player is playing.</li>
 </ul>
 
-You can also use the unicode symbols of the game (https://wiki.bedrock.dev/concepts/emojis.html) and add colors! (See the <a href="resources/format.yml">format.yml</a> file for more information).
+You can also use the unicode symbols of the game and add colors! (See the <a href="https://github.com/AmmyR/InfoTag/blob/main/resources/format.yml#L17">format.yml</a> file for more information).
 
 # 🔎 Example (Default formatted nametag)
 <img src="example.png"/>
