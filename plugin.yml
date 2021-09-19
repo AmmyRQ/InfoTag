@@ -1,0 +1,6 @@
+name: InfoTag
+author: AmmyR
+api: 3.0.0
+main: AmmyRQ\InfoTag\Main
+version: 1.0-STABLE
+softdepend: PureChat
