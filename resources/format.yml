@@ -3,6 +3,18 @@
 # with the original version, & all changes you have made will be removed.
 cfg-version: 1.0
 
+# Faction plugins to be used by the plugin
+#   The plugin supports the following factions plugins: SimpleFaction, FactionMaster, PiggyFactions & FactionsPE.
+#   [!] If the plugin you define here does not exist, or you do not define a valid one, the {faction} tag will simply be ignored.
+#   To not use any plugins, you can leave a blank space, e.g:
+#     factions-plugin: ""
+#
+#   --- IMPORTANT ---
+#   [!] Use plugins provided by Poggit (https://poggit.pmmp.io/)
+#   If you use factions plugins that do not come from this source, an error may occur because sometimes those who provide
+#   plugins from external sources (such as YouTube) often modify them.
+factions-plugin: "FactionMaster"
+
 #############################
 # --- Player nametag format ---
 # [!] If PureChat is disabled, the player's name will be used instead.
@@ -13,6 +25,7 @@ cfg-version: 1.0
 # {maxfood} -> Player's max food.
 # {ping} -> Player's ping (ms).
 # {device} -> The device from which the player is playing
+# {faction} -> Faction to which the player belongs
 # ---------------------------------------------------------------------
 # You can use the unicode symbols from the game.
 # You can find them here: https://wiki.bedrock.dev/concepts/emojis.html
@@ -20,7 +33,7 @@ cfg-version: 1.0
 # Use \n to add a new line, and § to add colors.
 # You can find all the colors here: https://minecraft.fandom.com/wiki/Formatting_codes#Color_codes
 #############################
-format: "{nametag}\n§c§l{health} ♥ §r| §g{food} \n§b{device} §r| §8Ping: {ping}"
+format: "{nametag} §0- §aFaction: §7{faction}\n§c§l{health} ♥ §r| §g{food} \n§b{device} §r| §8Ping: {ping}"
 
 #############################
 # Time in which the players' nametag will be updated (seconds)
