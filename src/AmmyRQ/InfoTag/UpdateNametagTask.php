@@ -20,7 +20,7 @@ class UpdateNametagTask extends Task
      */
     public function onRun(?int $currentTick) : void
     {
-        foreach(API::getAllowedWorld() as $worldName)
+        foreach(API::getAllowedWorlds() as $worldName)
         {
             if(!is_null($level = Main::getInstance()->getServer()->getLevelByName($worldName)) && Main::getInstance()->getServer()->isLevelLoaded($worldName))
             {
