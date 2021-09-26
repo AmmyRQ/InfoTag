@@ -2,11 +2,15 @@
 
 namespace AmmyRQ\InfoTag;
 
+use AmmyRQ\InfoTag\Factions\FactionsManager;
 use pocketmine\Player;
 use pocketmine\utils\Config;
 
 class API
 {
+
+    /** @const float */
+    private const CFG_VERSION = 1.0;
 
     /** @var array */
     private static array $devices = [
@@ -41,7 +45,27 @@ class API
         if(array_key_exists($player->getName(), self::$playerDevices))
             $newNametag = str_replace("{device}", self::$devices[self::$playerDevices[$player->getName()]], $newNametag);
 
+        if(FactionsManager::isFactionsSupportEnabled())
+            $newNametag = str_replace("{faction}", FactionsManager::getFactionNameByPlayer($player), $newNametag);
+
         $player->setNameTag($newNametag);
+    }
+
+    /**
+     * Cleans the player's nametag and restores it to its original format
+     * @param Player $player
+     * @return void
+     */
+    public static function resetNametag(Player $player) : void
+    {
+        if(Main::$isPureChatEnabled)
+        {
+            $plugin = Main::getInstance()->getServer()->getPluginManager()->getPlugin("PureChat");
+            $nametag = $plugin->getNametag($player);
+        }
+        else $nametag = $player->getDisplayName();
+
+        $player->setNameTag($nametag);
     }
 
 
@@ -51,7 +75,7 @@ class API
      */
     public static function getNametagFormat() : string
     {
-        Main::getInstance()->verifyFile();
+        self::verifyFile();
 
         $file = new Config(Main::getInstance()->getDataFolder() . "format.yml", Config::YAML);
 
@@ -65,7 +89,7 @@ class API
      */
     public static function getUpdateTicks() : int
     {
-        Main::getInstance()->verifyFile();
+        self::verifyFile();
 
         $file = new Config(Main::getInstance()->getDataFolder() . "format.yml", Config::YAML);
 
@@ -78,9 +102,9 @@ class API
      * Returns an array containing the name of all allowed worlds in which the nametag will be updated
      * @return array
      */
-    public static function getAllowedWorld() : array
+    public static function getAllowedWorlds() : array
     {
-        Main::getInstance()->verifyFile();
+        self::verifyFile();
 
         $file = new Config(Main::getInstance()->getDataFolder() . "format.yml", Config::YAML);
 
@@ -91,11 +115,12 @@ class API
 
     /**
      * Returns the amount of ping formatted
+     * @param Player $player
      * @return string
      */
     public static function getFormattedPing(Player $player) : string
     {
-        Main::getInstance()->verifyFile();
+        self::verifyFile();
 
         $file = new Config(Main::getInstance()->getDataFolder() . "format.yml", Config::YAML);
         $ping = $player->getPing();
@@ -106,5 +131,63 @@ class API
         if($ping >= 201) return str_replace("{ping}", $ping,$file->get("pings")["verybad"] . " ms");
 
         return "Unknown format.";
+    }
+
+    /**
+     * Returns the name of the factions plugin to be used
+     * @return string
+     */
+    public static function getFactionsPluginName() : string
+    {
+        self::verifyFile();
+
+        $file = new Config(Main::getInstance()->getDataFolder() . "format.yml", Config::YAML);
+
+        return $file->get("factions-plugin");
+    }
+
+    /**
+     * Verifies the existence, version & content of the file "format.yml"
+     * @return void
+     */
+    public static function verifyFile() : void
+    {
+        if(!is_dir(Main::getInstance()->getDataFolder())) @mkdir(Main::getInstance()->getDataFolder());
+
+        if(!is_file(Main::getInstance()->getDataFolder() . "format.yml")) Main::getInstance()->saveResource("format.yml");
+
+        $file = new Config(Main::getInstance()->getDataFolder() . "format.yml", Config::YAML);
+
+        if(!$file->exists("cfg-version") || $file->get("cfg-version") !== self::CFG_VERSION)
+        {
+            Main::getInstance()->getServer()->getLogger()->debug("[InfoTag] The configuration version does not exists or is out of date in the format.yml file. Updating file...");
+
+            @unlink(Main::getInstance()->getDataFolder() . "format.yml");
+            Main::getInstance()->saveResource("format.yml");
+        }
+
+        if(!$file->exists("format"))
+        {
+            Main::getInstance()->getServer()->getLogger()->debug("[InfoTag] The content in the format.yml file does not exists or it is incomplete (\"format\" key). Updating file...");
+
+            @unlink(Main::getInstance()->getDataFolder() . "format.yml");
+            Main::getInstance()->saveResource("format.yml");
+        }
+
+        if(!$file->exists("worlds") || is_null($file->get("worlds")))
+        {
+            Main::getInstance()->getServer()->getLogger()->debug("[InfoTag] The content in the format.yml file does not exists or it is incomplete (\"world\" key). Updating file...");
+
+            @unlink(Main::getInstance()->getDataFolder() . "format.yml");
+            Main::getInstance()->saveResource("format.yml");
+        }
+
+        if(!$file->exists("factions-plugin"))
+        {
+            Main::getInstance()->getServer()->getLogger()->debug("[InfoTag] The content in the format.yml file does not exists or it is incomplete (\"factions-pluign\" key). Updating file...");
+
+            @unlink(Main::getInstance()->getDataFolder() . "format.yml");
+            Main::getInstance()->saveResource("format.yml");
+        }
     }
 }
