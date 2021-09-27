@@ -11,14 +11,12 @@ use pocketmine\network\mcpe\protocol\LoginPacket;
 use pocketmine\plugin\PluginException;
 use pocketmine\utils\Config;
 
-use AmmyRQ\InfoTag\{API, UpdateNametagTask};
+use AmmyRQ\InfoTag\API;
 use AmmyRQ\InfoTag\Factions\FactionsManager;
+use AmmyRQ\InfoTag\Nametag\IntegrationManager;
 
 class Main extends PluginBase implements Listener
 {
-
-    /** @var bool */
-    public static bool $isPureChatEnabled = false;
 
     /** @var null|self */
     private static ?Main $instance = null;
@@ -40,22 +38,14 @@ class Main extends PluginBase implements Listener
     public function onEnable() : void
     {
         self::$instance = $this;
-        API::verifyFile();
 
-        //Starts the nametag update task
-        new UpdateNametagTask();
+        API::verifyFile();
         
         //Initialises factions manager
         FactionsManager::init();
 
-        $pluginManager = $this->getServer()->getPluginManager();
-
-        //Checks if PureChat is enabled in order to use it in the plugin
-        if(!is_null($pluginManager->getPlugin("PureChat")))
-        {
-            $this->getServer()->getLogger()->debug("[InfoTag] PureChat is enabled.");
-            self::$isPureChatEnabled = true;
-        }
+        //Initialises nametag manager
+        IntegrationManager::init();
 
         $this->getServer()->getPluginManager()->registerEvents($this, $this);
     }
