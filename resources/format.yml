@@ -17,8 +17,8 @@ factions-plugin: "FactionMaster"
 
 #############################
 # --- Player nametag format ---
-# [!] If PureChat is disabled, the player's name will be used instead.
-# {nametag} -> PureChat nametag format.
+# [!] If PureChat or RankSystem are disabled, the player's name will be used instead.
+# {nametag} -> PureChat & RankSystem nametag format.
 # {health} -> Player's current health.
 # {maxhealth} -> PLayer's max health.
 # {food} -> Player's current food.
