@@ -2,10 +2,12 @@ name: InfoTag
 author: AmmyR
 api: 3.0.0
 main: AmmyRQ\InfoTag\Main
-version: 2.0-STABLE
+version: 3.0-STABLE
 softdepend:
   - PureChat
+  - RankSystem
   - SimpleFaction
   - FactionMaster
   - FactionsPE
   - PiggyFactions
+ 
