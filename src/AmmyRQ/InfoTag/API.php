@@ -2,9 +2,11 @@
 
 namespace AmmyRQ\InfoTag;
 
-use AmmyRQ\InfoTag\Factions\FactionsManager;
 use pocketmine\Player;
 use pocketmine\utils\Config;
+
+use AmmyRQ\InfoTag\Factions\FactionsManager;
+use AmmyRQ\InfoTag\Nametag\IntegrationManager;
 
 class API
 {
@@ -29,10 +31,19 @@ class API
      */
     public static function updatePlayerTag(Player $player) : void
     {
-        if(Main::$isPureChatEnabled)
+        if(!is_null($rankManager = IntegrationManager::getRankManager()))
         {
-            $plugin = Main::getInstance()->getServer()->getPluginManager()->getPlugin("PureChat");
-            $nametag = $plugin->getNametag($player);
+            switch($rankManager->getName())
+            {
+                case "PureChat":
+                    $nametag = $rankManager->getNametag($player);
+                break;
+
+                case "RankSystem":
+                    $nametag = $rankManager->getSessionManager()->get($player->getName())->getNameTagFormat();
+                break;
+            }
+
         }
         else $nametag = $player->getDisplayName();
 
