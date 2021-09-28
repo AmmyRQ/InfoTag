@@ -43,7 +43,6 @@ class API
                     $nametag = $rankManager->getSessionManager()->get($player->getName())->getNameTagFormat();
                 break;
             }
-
         }
         else $nametag = $player->getDisplayName();
 
@@ -69,10 +68,18 @@ class API
      */
     public static function resetNametag(Player $player) : void
     {
-        if(Main::$isPureChatEnabled)
+        if(!is_null($rankManager = IntegrationManager::getRankManager()))
         {
-            $plugin = Main::getInstance()->getServer()->getPluginManager()->getPlugin("PureChat");
-            $nametag = $plugin->getNametag($player);
+            switch($rankManager->getName())
+            {
+                case "PureChat":
+                    $nametag = $rankManager->getNametag($player);
+                break;
+
+                case "RankSystem":
+                    $nametag = $rankManager->getSessionManager()->get($player->getName())->getNameTagFormat();
+                break;
+            }
         }
         else $nametag = $player->getDisplayName();
 
