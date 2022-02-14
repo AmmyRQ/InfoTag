@@ -15,16 +15,16 @@ class UpdateNametagTask extends Task
     }
 
     /**
-     * @param int|null $currentTick
      * @return void
      */
-    public function onRun(?int $currentTick) : void
+    public function onRun() : void
     {
         foreach(API::getAllowedWorlds() as $worldName)
         {
-            if(!is_null($level = Main::getInstance()->getServer()->getLevelByName($worldName)) && Main::getInstance()->getServer()->isLevelLoaded($worldName))
+            if(!is_null($level = Main::getInstance()->getServer()->getWorldManager()->getWorldByName($worldName)) && Main::getInstance()->getServer()->getWorldManager()->isWorldLoaded($worldName))
             {
-                foreach($level->getPlayers() as $players) API::updatePlayerTag($players);
+                foreach($level->getPlayers() as $players)
+                    API::updatePlayerTag($players);
             }
         }
     }
