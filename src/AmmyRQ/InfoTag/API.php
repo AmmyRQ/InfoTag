@@ -2,7 +2,7 @@
 
 namespace AmmyRQ\InfoTag;
 
-use pocketmine\Player;
+use pocketmine\player\Player;
 use pocketmine\utils\Config;
 
 use AmmyRQ\InfoTag\Factions\FactionsManager;
@@ -14,7 +14,7 @@ class API
     /** @const float */
     private const CFG_VERSION = 1.0;
 
-    /** @var array */
+    /** @var String[] */
     private static array $devices = [
       "Unknown", "Android", "iOS", "MacOS", "FireOS",
       "GearVR", "HoloLens", "Windows10", "Windows",
@@ -48,7 +48,7 @@ class API
 
         $newNametag = str_replace(
             ["{nametag}", "{health}", "{maxhealth}", "{food}", "{maxfood}", "{ping}"],
-            [$nametag, $player->getHealth(), $player->getMaxHealth(), $player->getFood(), $player->getMaxFood(), self::getFormattedPing($player)],
+            [$nametag, $player->getHealth(), $player->getMaxHealth(), $player->getHungerManager()->getFood(), $player->getHungerManager()->getMaxFood(), self::getFormattedPing($player)],
             self::getNametagFormat()
         );
 
@@ -132,7 +132,7 @@ class API
     }
 
     /**
-     * Returns the amount of ping formatted
+     * Returns the amount of ms formatted
      * @param Player $player
      * @return string
      */
@@ -141,12 +141,16 @@ class API
         self::verifyFile();
 
         $file = new Config(Main::getInstance()->getDataFolder() . "format.yml", Config::YAML);
-        $ping = $player->getPing();
+        $ping = $player->getNetworkSession()->getPing();
 
-        if($ping >= 0 && $ping <= 90) return str_replace("{ping}", $ping, $file->get("pings")["good"] . " ms");
-        if($ping >= 91 && $ping <= 140) return str_replace("{ping}", $ping,$file->get("pings")["intermediate"] . " ms");
-        if($ping >= 141 && $ping <= 200) return str_replace("{ping}", $ping,$file->get("pings")["bad"] . " ms");
-        if($ping >= 201) return str_replace("{ping}", $ping,$file->get("pings")["verybad"] . " ms");
+        if($ping >= 0 && $ping <= 90)
+            return str_replace("{ping}", $ping, $file->get("pings")["good"] . " ms");
+        if($ping >= 91 && $ping <= 140)
+            return str_replace("{ping}", $ping,$file->get("pings")["intermediate"] . " ms");
+        if($ping >= 141 && $ping <= 200)
+            return str_replace("{ping}", $ping,$file->get("pings")["bad"] . " ms");
+        if($ping >= 201)
+            return str_replace("{ping}", $ping,$file->get("pings")["verybad"] . " ms");
 
         return "Unknown format.";
     }
@@ -170,9 +174,11 @@ class API
      */
     public static function verifyFile() : void
     {
-        if(!is_dir(Main::getInstance()->getDataFolder())) @mkdir(Main::getInstance()->getDataFolder());
+        if(!is_dir(Main::getInstance()->getDataFolder()))
+            @mkdir(Main::getInstance()->getDataFolder());
 
-        if(!is_file(Main::getInstance()->getDataFolder() . "format.yml")) Main::getInstance()->saveResource("format.yml");
+        if(!is_file(Main::getInstance()->getDataFolder() . "format.yml"))
+            Main::getInstance()->saveResource("format.yml");
 
         $file = new Config(Main::getInstance()->getDataFolder() . "format.yml", Config::YAML);
 

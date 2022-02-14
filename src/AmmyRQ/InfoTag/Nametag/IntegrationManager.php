@@ -5,8 +5,6 @@ namespace AmmyRQ\InfoTag\Nametag;
 use pocketmine\Server;
 use pocketmine\plugin\Plugin;
 
-use AmmyRQ\InfoTag\Nametag\UpdateNametagTask;
-
 class IntegrationManager
 {
 

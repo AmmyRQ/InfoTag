@@ -2,30 +2,28 @@
 
 namespace AmmyRQ\InfoTag;
 
-use pocketmine\Player;
+use pocketmine\event\player\PlayerJoinEvent;
+use pocketmine\player\Player;
 use pocketmine\plugin\PluginBase;
 use pocketmine\event\Listener;
-use pocketmine\event\server\DataPacketReceiveEvent;
-use pocketmine\event\entity\EntityLevelChangeEvent;
-use pocketmine\network\mcpe\protocol\LoginPacket;
+use pocketmine\event\entity\EntityTeleportEvent;
 use pocketmine\plugin\PluginException;
 use pocketmine\utils\Config;
 
-use AmmyRQ\InfoTag\API;
 use AmmyRQ\InfoTag\Factions\FactionsManager;
 use AmmyRQ\InfoTag\Nametag\IntegrationManager;
 
 class Main extends PluginBase implements Listener
 {
 
-    /** @var null|self */
+    /** @var null|Main */
     private static ?Main $instance = null;
 
     /**
      * @return self
      * @throws PluginException if self::$instance is null
      */
-    public static function getInstance() : self
+    public static function getInstance() : Main
     {
         if(!is_null(self::$instance)) return self::$instance;
 
@@ -53,39 +51,40 @@ class Main extends PluginBase implements Listener
     /**
      * Records the player's name and device identifier in an array
      * @see API::$playerDevices
-     * @param DataPacketReceiveEvent $event
+     * @param PlayerJoinEvent $event
      * @return void
      */
-    public function onDataPacketReceiveEvent(DataPacketReceiveEvent $event) : void
+    public function onJoin(PlayerJoinEvent $event) : void
     {
-        if($event->getPacket() instanceof LoginPacket)
+        $deviceOs = $event->getPlayer()->getPlayerInfo()->getExtraData()["DeviceOS"];
+
+        $file = new Config(self::getInstance()->getDataFolder() . "format.yml", Config::YAML);
+
+        //Checks if {device} exists in the format.yml file
+        if(strpos($file->get("format"), "{device}"))
         {
-            $file = new Config(self::getInstance()->getDataFolder() . "format.yml", Config::YAML);
+            $name = $event->getPlayer()->getName();
 
-            //Checks if {device} exists in the format.yml file
-            if(strpos($file->get("format"), "{device}"))
-            {
-                $name = $event->getPacket()->username;
+            if(array_key_exists($name, API::$playerDevices))
+                unset(API::$playerDevices[$name]);
 
-                if(array_key_exists($name, API::$playerDevices)) unset(API::$playerDevices[$name]);
-                API::$playerDevices[$name] = $event->getPacket()->clientData["DeviceOS"];
-            }
+            API::$playerDevices[$name] = $deviceOs;
         }
     }
 
     /**
      * Resets the player's nametag format if the player travels to a world where the info nametag is not allowed
-     * @param EntityLevelChangeEvent $event
+     * @param EntityTeleportEvent $event
      * @return void
      */
-    public function onEntityLevelChangeEvent(EntityLevelChangeEvent $event) : void
+    public function onEntityTeleport(EntityTeleportEvent $event) : void
     {
-        $player = $event->getEntity();
+        $entity = $event->getEntity();
 
-        if($player instanceof Player)
+        if($entity instanceof Player)
         {
-            if(!in_array($event->getTarget()->getName(), API::getAllowedWorlds()))
-                API::resetNametag($player);
+            if(!in_array($event->getTo()->getWorld()->getDisplayName(), API::getAllowedWorlds()))
+                API::resetNametag($entity);
         }
     }
 }
