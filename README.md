@@ -1,5 +1,5 @@
 # InfoTag
-A simple PocketMine-MP (3.0.0) plugin that allows you to view basic player information in the player's nametag, with <a href="https://poggit.pmmp.io/p/PureChat/">PureChat</a> & <a href="https://poggit.pmmp.io/p/RankSystem">RankSystem</a> integration (and factions support).
+A simple PocketMine-MP (4.0.0) plugin that allows you to view basic player information in the player's nametag, with <a href="https://poggit.pmmp.io/p/PureChat/">PureChat</a> & <a href="https://poggit.pmmp.io/p/RankSystem">RankSystem</a> integration (and factions support).
 
 # 👀 First steps
 You must first install the plugin ("plugins/" folder) and start the server, and then shut it down.
