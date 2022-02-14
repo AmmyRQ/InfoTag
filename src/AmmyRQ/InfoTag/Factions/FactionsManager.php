@@ -2,9 +2,10 @@
 
 namespace AmmyRQ\InfoTag\Factions;
 
-use pocketmine\{Server, Player};
+use pocketmine\Server;
+use pocketmine\player\Player;
 
-use AmmyRQ\InfoTag\{Main, API};
+use AmmyRQ\InfoTag\API;
 
 class FactionsManager
 {
@@ -37,9 +38,11 @@ class FactionsManager
                 self::$factionsSupport = true;
                 Server::getInstance()->getLogger()->notice("[InfoTag] Factions support has been enabled. Using \"$factionsPlugin\" plugin.");
             }
-            else Server::getInstance()->getLogger()->warning("[InfoTag] \"$factionsPlugin\" plugin is not installed or is disabled. Factions support has been disabled.");
+            else
+                Server::getInstance()->getLogger()->warning("[InfoTag] \"$factionsPlugin\" plugin is not installed or is disabled. Factions support has been disabled.");
         }
-        else Server::getInstance()->getLogger()->warning("[InfoTag] No valid factions plugin has been provided. Factions support has been disabled.");
+        else
+            Server::getInstance()->getLogger()->warning("[InfoTag] No valid factions plugin has been provided. Factions support has been disabled.");
     }
 
     /**
