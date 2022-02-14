@@ -2,7 +2,7 @@ name: InfoTag
 author: AmmyR
 api: 4.0.0
 main: AmmyRQ\InfoTag\Main
-version: 3.0-STABLE
+version: 4.0-STABLE
 softdepend:
   - PureChat
   - RankSystem
